@@ -53,4 +53,10 @@ class AdminController extends Controller
 
         return back()->with('message', 'Product Added Successfully');
     }
+
+    public function show_product()
+    {
+        $products = Product::all();
+        return view('admin.show_product', compact('products'));
+    }
 }
