@@ -55,4 +55,21 @@ class HomeController extends Controller
             return redirect('login');
         }
     }
+
+    public function show_cart()
+    {
+        if (Auth::id()) {
+            $id = Auth::user()->id;
+            $carts = Cart::where('user_id', $id)->get();
+            return view('home.showcart', compact('carts'));
+        } else {
+            return redirect('login');
+        }
+    }
+
+    public function remove_cart(Cart $cart)
+    {
+        $cart->delete();
+        return back();
+    }
 }

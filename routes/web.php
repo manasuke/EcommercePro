@@ -24,3 +24,5 @@ Route::get('/update_product/{product}', [AdminController::class, 'update_product
 Route::post('/update_product_confirm/{product}', [AdminController::class, 'update_product_confirm']);
 Route::get('/product_details/{product}', [HomeController::class, 'product_details']);
 Route::post('/add_cart/{product}', [HomeController::class, 'add_cart']);
+Route::get('/show_cart', [HomeController::class, 'show_cart']);
+Route::get('/remove_cart/{cart}', [HomeController::class, 'remove_cart']);
