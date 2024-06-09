@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::latest()->paginate(4);
+        $products = Product::latest()->paginate(3);
         return view('home.userpage', compact('products'));
     }
     public function redirect()
@@ -19,8 +19,13 @@ class HomeController extends Controller
         if ($usertype == '1') {
             return view('admin.home');
         } else {
-            $products = Product::latest()->paginate(4);
+            $products = Product::latest()->paginate(3);
             return view('home.userpage', compact('products'));
         }
+    }
+
+    public function product_details(Product $product)
+    {
+        return view('home.product_details', compact('product'));
     }
 }
