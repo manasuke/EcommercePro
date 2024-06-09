@@ -45,7 +45,12 @@
         <!-- header section strats -->
         @include('home.header')
         <!-- end header section -->
-
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                {{ session()->get('message') }}
+            </div>
+        @endif
         <div class="col-sm-6 col-md-4 col-lg-4" style="margin: auto; width: 50% padding: 30px">
             <table>
                 <tr class="th_color">
@@ -75,6 +80,11 @@
                 @endforeach
             </table>
             <div>Total price: {{ $totalPrice }}</div>
+        </div>
+        <div style="margin: auto;">
+            <h3>Process Order</h3>
+            <a href="{{ url('cash_order') }}" class="btn btn-danger">Cash On Delivery</a>
+            <a href="" class="btn btn-danger">Pay Using Card</a>
         </div>
     </div>
     <!-- footer start -->
