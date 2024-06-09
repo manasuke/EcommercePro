@@ -59,4 +59,34 @@ class AdminController extends Controller
         $products = Product::all();
         return view('admin.show_product', compact('products'));
     }
+
+    public function delete_product(Product $product)
+    {
+        $product->delete();
+        return back()->with('message', 'Product Deleted Successfully');
+    }
+
+    public function update_product(Product $product)
+    {
+        $categories = Category::all();
+        return view('admin.update_product', compact('product', 'categories'));
+    }
+
+    public function update_product_confirm(Product $product)
+    {
+        $product->title = request('title');
+        $product->description = request('description');
+        $product->category = request('category');
+        $product->quantity = request('quantity');
+        $product->price = request('price');
+        $product->discount = request('discount');
+        $image = request('image');
+        if ($image) {
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('product', $image_name);
+            $product->image =  $image_name;
+        }
+        $product->update();
+        return redirect('show_product')->with('message', 'Product Updated Successfully');
+    }
 }
