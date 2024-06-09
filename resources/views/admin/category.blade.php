@@ -16,6 +16,7 @@
 
         .input_color {
             color: black;
+            padding-bottom: 10px;
         }
 
         .center {
