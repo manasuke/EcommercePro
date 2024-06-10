@@ -5,6 +5,13 @@
                 Our <span>products</span>
             </h2>
         </div>
+        <div>
+            <form action="{{ url('search_product') }}" method="POST">
+                @csrf
+                <input type="text" name="search" placeholder="Search products">
+                <input type="submit" value="Search" class="btn btn-primary">
+            </form>
+        </div>
         <div class="row">
             @foreach ($products as $product)
                 <div class="col-sm-6 col-md-4 col-lg-4">

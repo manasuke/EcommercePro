@@ -219,4 +219,14 @@ class HomeController extends Controller
             return redirect('login');
         }
     }
+
+    public function search_product()
+    {
+        if (request()->has('search')) {
+            $products = Product::where('title', 'like', '%' . request('search') . '%')->paginate(3);
+            $comments = Comment::orderBy('id', 'desc')->get();
+            $replies = Reply::all();
+            return view('home.userpage', compact('products', 'comments', 'replies'));
+        }
+    }
 }
