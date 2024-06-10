@@ -32,3 +32,6 @@ Route::post('/stripe/{totalPrice}', [HomeController::class, 'stripePost'])->name
 Route::get('/order', [AdminController::class, 'order']);
 Route::get('/delivered/{order}', [AdminController::class, 'delivered']);
 Route::get('/print_pdf/{order}', [AdminController::class, 'print_pdf']);
+Route::get('/send_email/{order}', [AdminController::class, 'send_email']);
+Route::post('/send_user_email/{order}', [AdminController::class, 'send_user_email']);
+Route::post('/search', [AdminController::class, 'searchData']);

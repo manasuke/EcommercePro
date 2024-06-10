@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use App\Notifications\MyFirstNotification;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class AdminController extends Controller
 {
@@ -112,5 +114,33 @@ class AdminController extends Controller
     {
         $pdf = FacadePdf::loadView('admin.pdf', compact('order'));
         return $pdf->download($order->id . '.pdf');
+    }
+
+    public function send_email(Order $order)
+    {
+        return view('admin.email_info', compact('order'));
+    }
+
+    public function send_email_confirm(Order $order)
+    {
+        $details = [
+            'greeting' => request('greeting'),
+            'firstline' => request('firstline'),
+            'body' => request('body'),
+            'button' => request('button'),
+            'url' => request('url'),
+            'lastline' => request('lastline'),
+        ];
+
+        Notification::send($order, new MyFirstNotification($details));
+
+        return back();
+    }
+
+    public function searchData(Request $request)
+    {
+        $searchText = $request->search;
+        $orders = Order::where('product_title', 'like', '%' . $searchText . '%')->get();
+        return view('admin.order', compact('orders'));
     }
 }
