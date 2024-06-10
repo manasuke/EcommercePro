@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -88,5 +89,20 @@ class AdminController extends Controller
         }
         $product->update();
         return redirect('show_product')->with('message', 'Product Updated Successfully');
+    }
+
+    public function order()
+    {
+        $orders = Order::all();
+        return view('admin.order', compact('orders'));
+    }
+
+    public function delivered(Order $order)
+    {
+        // dd($order);
+        $order->delivery_status = 'delivered';
+        $order->payment_status = 'paid';
+        $order->update();
+        return back();
     }
 }
