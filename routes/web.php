@@ -37,3 +37,5 @@ Route::post('/send_user_email/{order}', [AdminController::class, 'send_user_emai
 Route::post('/search', [AdminController::class, 'searchData']);
 Route::get('/show_order', [HomeController::class, 'show_order']);
 Route::get('/cancel_order/{order}', [HomeController::class, 'cancel_order']);
+Route::post('/add_comment', [HomeController::class, 'add_comment']);
+Route::post('/add_reply', [HomeController::class, 'add_reply']);

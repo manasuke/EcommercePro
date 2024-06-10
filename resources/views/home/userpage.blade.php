@@ -45,6 +45,45 @@
     @include('home.product')
     <!-- end product section -->
 
+    <div style="text-align: center; padding-bottom: 20px">
+        <h1 style="font-size: 30px; text-align: center;padding-top: 20px;padding-bottom: 20px">Comments</h1>
+        <form action="{{ url('add_comment') }}" method="POST">
+            @csrf
+            <textarea name="comment" style="height: 150px; width: 500px" placeholder="Enter your comment"></textarea>
+            <br>
+            <input type="submit" value="Comment">
+        </form>
+    </div>
+
+    <div style="padding-left: 20%">
+        <h1 style="font-size: 20px; padding-bottom: 20px">All Comments</h1>
+        @foreach ($comments as $comment)
+            <div>
+                <b>{{ $comment->name }}</b>
+                <p>{{ $comment->comment }}</p>
+                <a href="javascript:void(0)" onclick="reply(this)" data-CommentId="{{ $comment->id }}">Reply</a>
+            </div>
+            @foreach ($replies as $reply)
+                @if ($reply->comment_id == $comment->id)
+                    <div style="padding-left: 3%; padding-bottom:10px;">
+                        <b>{{ $reply->name }}</b>
+                        <p>{{ $reply->reply }}</p>
+                    </div>
+                @endif
+            @endforeach
+        @endforeach
+        <div class="replyDiv" style="display: none">
+            <form action="{{ url('add_reply') }}" method="POST">
+                @csrf
+                <input type="text" id="commentId" name="commentId" hidden>
+                <textarea style="height: 150px; width: 500px" name="reply" placeholder="Enter your reply"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">Reply</button>
+                <a href="javascript:void(0)" onclick="reply_close(this)">Close</a>
+            </form>
+        </div>
+    </div>
+
     <!-- subscribe section -->
     @include('home.subscribe')
     <!-- end subscribe section -->
@@ -63,6 +102,26 @@
 
         </p>
     </div>
+    <script type="text/javascript">
+        function reply(caller) {
+            document.getElementById('commentId').value = caller.getAttribute('data-CommentId');
+            $('.replyDiv').insertAfter(caller);
+            $('.replyDiv').show();
+        }
+
+        function reply_close() {
+            $('.replyDiv').hide();
+        }
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+    </script>
     <!-- jQery -->
     <script src="home/js/jquery-3.4.1.min.js"></script>
     <!-- popper js -->

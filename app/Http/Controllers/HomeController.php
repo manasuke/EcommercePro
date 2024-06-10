@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Comment;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Reply;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +19,9 @@ class HomeController extends Controller
     public function index()
     {
         $products = Product::latest()->paginate(3);
-        return view('home.userpage', compact('products'));
+        $comments = Comment::orderBy('id', 'desc')->get();
+        $replies = Reply::all();
+        return view('home.userpage', compact('products', 'comments', 'replies'));
     }
     public function redirect()
     {
@@ -38,8 +42,7 @@ class HomeController extends Controller
 
             return view('admin.home', compact('total_products', 'total_users', 'total_orders', 'total_revenue', 'total_delivered', 'total_processing'));
         } else {
-            $products = Product::latest()->paginate(3);
-            return view('home.userpage', compact('products'));
+            $this->index();
         }
     }
 
@@ -186,5 +189,34 @@ class HomeController extends Controller
         $order->delivery_status = 'Cancelled';
         $order->update();
         return back()->with('message', 'Order Cancelled!');
+    }
+
+    public function add_comment()
+    {
+        if (Auth::id()) {
+            $comment = new Comment();
+            $comment->user_id = Auth::user()->id;
+            $comment->name = Auth::user()->name;
+            $comment->comment = request('comment');
+            $comment->save();
+            return back();
+        } else {
+            return redirect('login');
+        }
+    }
+
+    public function add_reply()
+    {
+        if (Auth::id()) {
+            $reply = new Reply();
+            $reply->user_id = Auth::user()->id;
+            $reply->name = Auth::user()->name;
+            $reply->comment_id = request('commentId');
+            $reply->reply = request('reply');
+            $reply->save();
+            return back();
+        } else {
+            return redirect('login');
+        }
     }
 }
