@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -104,5 +106,11 @@ class AdminController extends Controller
         $order->payment_status = 'paid';
         $order->update();
         return back();
+    }
+
+    public function print_pdf(Order $order)
+    {
+        $pdf = FacadePdf::loadView('admin.pdf', compact('order'));
+        return $pdf->download($order->id . '.pdf');
     }
 }

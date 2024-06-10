@@ -78,6 +78,7 @@
                             <th class="th_deg">Delivery Status</th>
                             <th class="th_deg">Image</th>
                             <th class="th_deg">Delivered</th>
+                            <th class="th_deg">Print PDF</th>
                         </tr>
                         @foreach ($orders as $order)
                             <tr>
@@ -95,10 +96,13 @@
                                 <td>
                                     @if ($order->delivery_status == 'processing')
                                         <a class="btn btn-primary" onclick="return confirm('Are you sure?')"
-                                            href="{{ url('order', $order) }}">Delivered</a>
+                                            href="{{ url('delivered', $order) }}">Delivered</a>
                                     @else
                                         <p style="color: green">Delivered</p>
                                     @endif
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary" href="{{ url('print_pdf', $order) }}">Print PDF</a>
                                 </td>
                             </tr>
                         @endforeach
