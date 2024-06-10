@@ -59,6 +59,7 @@ class HomeController extends Controller
             $cart->phone = $user->phone;
             $cart->address = $user->address;
             $cart->product_title = $product->title;
+
             if ($product->discount) {
                 $cart->price = $product->discount * request('quantity');
             } else {
@@ -104,6 +105,7 @@ class HomeController extends Controller
             $order->address = $data->address;
             $order->user_id = $data->user_id;
             $order->product_title = $data->product_title;
+            $order->quantity = $data->quantity;
             $order->price = $data->price;
             $order->image = $data->image;
             $order->product_id = $data->product_id;
@@ -166,5 +168,23 @@ class HomeController extends Controller
         Session::flash('success', 'Payment successful!');
 
         return back();
+    }
+
+    public function show_order()
+    {
+        if (Auth::id()) {
+            $id = Auth::user()->id;
+            $orders = Order::where('user_id', $id)->get();
+            return view('home.order', compact('orders'));
+        } else {
+            return redirect('login');
+        }
+    }
+
+    public function cancel_order(Order $order)
+    {
+        $order->delivery_status = 'Cancelled';
+        $order->update();
+        return back()->with('message', 'Order Cancelled!');
     }
 }
